@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dashboard administrasi Toko H Endun" />
+  <title>Admin Toko</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="maintenance-overlay" class="maintenance-overlay" hidden>
+    <div class="maintenance-card">
+      <div class="maintenance-icon">⚠️</div>
+      <h1>Website Sedang Dalam Pemeliharaan</h1>
+      <p>Pasya sedang melakukan peningkatan layanan. Silakan kembali nanti. Terima kasih atas pengertian Anda.</p>
+    </div>
+  </div>
+
+  <div id="login-form" class="container">
+    <h2>Login Admin <br />Toko H Endun</h2>
+    <input type="email" id="email" placeholder="Email" autocomplete="email" />
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+    <button id="login-btn" type="button">Login</button>
+    <button id="google-login-btn" type="button">Login dengan Google</button>
+    <p>Belum punya akun? <a href="#" id="show-signup">Daftar</a></p>
+    <p>credit - @pasya</p>
+  </div>
+
+  <div id="signup-form" class="container" style="display:none;">
+    <h2>Daftar <br />Akun Baru</h2>
+    <input type="email" id="signup-email" placeholder="Email" autocomplete="email" required />
+    <input type="password" id="signup-password" placeholder="Password (minimal 6 karakter)" autocomplete="new-password" required />
+    <button id="signup-btn" type="button">Daftar</button>
+    <p>Sudah punya akun? <br /><a href="#" id="show-login">Kembali ke Login</a></p>
+    <p>credit - @pasya</p>
+  </div>
+
+  <div id="dashboard-container" class="container" style="display:none;">
+    <button id="logout-btn" class="logout-btn" type="button">Logout</button>
+    <button id="btn-stock-opname" class="opname-btn" type="button">Stock Opname</button>
+
+    <div class="foto-wrapper">
+      <img id="user-photo" class="user-photo" src="" alt="Foto User" />
+    </div>
+    <h2>Dashboard</h2>
+    <p>Selamat datang, <span id="user-email"></span>!</p>
+
+    <div id="form-barang">
+      <input type="text" id="namaBarang" placeholder="Nama Barang" autocomplete="off" />
+      <input type="number" id="hargaBarang" placeholder="Harga Total (Rp)" min="0" step="1" />
+      <select id="satuanBarang">
+        <option value="pcs" data-isi="1">1 pcs</option>
+        <option value="box" data-isi="12">1 box = 12 pcs</option>
+        <option value="dus" data-isi="24">1 dus = 24 pcs</option>
+        <option value="karton" data-isi="48">1 karton = 48 pcs</option>
+        <option value="custom">Custom...</option>
+      </select>
+      <div id="customWrapper" style="display:none; margin-top:5px;">
+        <input type="text" id="namaCustom" placeholder="Nama satuan custom" autocomplete="off" />
+        <input type="number" id="isiCustom" placeholder="Isi per satuan" min="1" step="1" />
+      </div>
+      <button id="btnTambah" type="button">Tambah Barang</button>
+    </div>
+
+    <div id="cari-barang">
+      <input type="search" id="searchBarang" placeholder="Cari Barang" autocomplete="off" />
+    </div>
+
+    <div id="barangContainer">
+      <div style="overflow:auto; max-height:225px;">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Barang</th>
+              <th>Satuan</th>
+              <th>Harga Total</th>
+              <th>Harga Satuan</th>
+              <th>Terakhir Diedit</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="barangList"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="loading-upload" style="display:none; margin-top:10px; color:#28a745;">⏳ Mengunggah data ke Firestore...</div>
+    <input type="file" id="excelUpload" accept=".xlsx,.xlsm" />
+    <button id="uploadExcelBtn" type="button">Upload Excel</button>
+    <button id="stopUploadBtn" type="button" style="display:none; margin-top:10px;">🛑 Stop Upload</button>
+    <div id="upload-log" style="display:none; max-height:200px; overflow-y:auto; background:#f9f9f9; border:1px solid #ccc; padding:10px; margin-top:10px; font-size:14px; border-radius:5px;"></div>
+
+    <button id="btnStatistikHarga" class="btnStatistikHarga" type="button">📊 Statistik Harga</button>
+    <button id="convert-btn" type="button">Convert ke Spreadsheet</button>
+  </div>
+
+  <div id="stock-opname-container" class="container" style="display:none; overflow-y:auto;">
+    <button id="btnBackToDashboard" class="btnBackToDashboard" type="button">Kembali</button>
+    <h2>Dashboard<br />Stock Opname</h2>
+    <p id="judul-dokumen-terpilih" style="font-weight:bold; margin-bottom:10px;"></p>
+
+    <div style="margin-top:20px;">
+      <h4>Lembar Kurang</h4>
+      <div style="overflow:auto; max-height:160px;">
+        <table>
+          <thead><tr><th>Qty</th><th>Nama Barang</th><th>Total</th><th>Aksi</th></tr></thead>
+          <tbody id="lembarKurang"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <h4>Lembar Lebih</h4>
+      <div style="overflow:auto; max-height:160px;">
+        <table>
+          <thead><tr><th>Qty</th><th>Nama Barang</th><th>Total</th><th>Aksi</th></tr></thead>
+          <tbody id="lembarLebih"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <input type="text" id="judulDokumen" placeholder="Masukkan nama dokumen" style="margin-top:15px; width:95%; padding:5px;" autocomplete="off" />
+    <button id="btnSimpanOpname" type="button">Simpan Hasil Stock Opname</button>
+    <button id="btn-riwayat-stock-opname" type="button">Riwayat Stock Opname</button>
+
+    <div id="sidebar-barang" style="flex:1; margin-top:20px;">
+      <h3>Daftar Barang</h3>
+      <input type="search" id="searchSidebarBarang" placeholder="Cari barang..." autocomplete="off" />
+      <div id="sidebarBarangContainer" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:5px;">
+        <table id="sidebarBarangList">
+          <thead><tr><th>No</th><th>Nama</th><th>Harga</th><th>Aksi</th></tr></thead>
+          <tbody id="sidebarBarangBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="riwayat-container" class="container" style="display:none;">
+    <h2>Riwayat <br />Stock Opname</h2>
+    <div id="riwayat-list" style="max-height:260px; overflow-y:auto;"></div>
+    <div id="hapus-semua-wrapper">
+      <button id="hapus-semua-riwayat" class="btnreset" type="button">🗑️ Hapus Semua Riwayat</button>
+    </div>
+    <button id="kembali-dari-riwayat" class="btnkembali" type="button">Kembali</button>
+  </div>
+
+  <div id="confirm-popup" class="confirm-popup" style="display:none;">
+    <div class="confirm-card">
+      <h3>Konfirmasi</h3>
+      <p id="confirm-message">Apakah Anda yakin?</p>
+      <div class="confirm-actions">
+        <button id="confirm-yes" type="button">Ya</button>
+        <button id="confirm-no" type="button">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="edit-popup" class="edit-popup" style="display:none;">
+    <div class="edit-card">
+      <span id="close-edit-popup" class="close-btn" role="button" tabindex="0" aria-label="Tutup">✕</span>
+      <h3>Edit Barang</h3>
+      <input type="text" id="edit-namaBarang" placeholder="Nama Barang" />
+      <input type="number" id="edit-hargaBarang" placeholder="Harga Total (Rp)" min="0" step="1" />
+      <input type="text" id="edit-namaSatuan" placeholder="Nama Satuan" />
+      <input type="number" id="edit-isiSatuan" placeholder="Isi per Satuan" min="1" step="1" />
+      <button id="save-edit-btn" type="button">Simpan Perubahan</button>
+    </div>
+  </div>
+
+  <div id="qty-popup" class="qty-popup" style="display:none;">
+    <div class="qty-card">
+      <h3 id="qty-title">Masukkan jumlah</h3>
+      <input type="number" id="qty-input" min="1" step="1" value="1" />
+      <select id="qty-unit-mode" aria-label="Satuan jumlah"></select>
+      <small id="qty-help" class="qty-help"></small>
+      <div class="qty-actions">
+        <button id="qty-ok" type="button">OK</button>
+        <button id="qty-cancel" type="button">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="alert-popup" class="alert-popup" style="display:none;">
+    <div class="alert-card"><span id="alert-message"></span></div>
+  </div>
+
+  <div id="statistik-popup" class="statistik-popup" style="display:none;">
+    <div class="statistik-card">
+      <span id="close-statistik-popup" class="close-btn" role="button" tabindex="0" aria-label="Tutup">✕</span>
+      <h3>Statistik Perubahan Harga</h3>
+      <div id="statistik-content"></div>
+      <button id="btnStatistikWaktu" type="button">📈 Lihat Grafik Riwayat</button>
+      <div id="statistik-chart" style="display:none; margin-top:12px; min-height:240px;"></div>
+    </div>
+  </div>
+
+  <div id="price-diff-container" class="price-diff">
+    <span id="close-price-diff" class="close-price-diff" role="button" tabindex="0" aria-label="Tutup">✕</span>
+    <h3>Perubahan Harga</h3>
+    <p><strong>Nama Barang:</strong> <span id="diff-nama"></span></p>
+    <p><strong>Harga Lama:</strong> Rp <span id="harga-lama">-</span></p>
+    <p><strong>Harga Baru:</strong> Rp <span id="harga-baru">-</span></p>
+    <p><strong>Selisih:</strong> Rp <span id="selisih-harga">-</span></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

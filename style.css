@@ -1,0 +1,778 @@
+/* Modernized CSS dengan animasi, gradien, dan gaya modern */
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f1f1f1 0%, #d4d4d4 100%);
+    flex-direction: column;
+    overflow: auto;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 60px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    text-align: center;
+    display: none;
+    position: relative;
+    animation: fadeInUp 0.6s ease;
+    transition: transform 0.3s;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+th {
+    background: linear-gradient(180deg, #28a745, #20c997);
+    color: white;
+}
+
+tr:hover td {
+    background: #f1f1f1;
+}
+
+input {
+    display: block;
+    width: 95%;
+    margin: 8px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #20c997;
+    box-shadow: 0 0 6px rgba(32, 201, 151, 0.5);
+    outline: none;
+}
+
+button {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 30px;
+    margin-top: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.logout-btn, .opname-btn, .btnBackToDashboard, .btnkembali, .btnreset {
+    background: linear-gradient(45deg, #28a745, #20c997);
+}
+
+.logout-btn:hover, .opname-btn:hover, .btnBackToDashboard:hover, .btnkembali:hover, .btnreset:hover {
+    background: linear-gradient(45deg, #dc3545, #ff6b6b);
+}
+
+.logout-btn {
+    position: absolute;
+    top: 15px;
+    left: 40px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+
+
+.opname-btn {
+    position: absolute;
+    top: 15px;
+    right: 40px;
+    cursor: pointer;
+}
+
+.opname-btn:hover {
+    background-color: #c82333;
+}
+
+.btnBackToDashboard {
+    position: absolute;
+    top: 20px;
+    left: 35px;
+    margin: auto;
+}
+
+.btnBackToDashboard:hover {
+    background-color: #c82333;
+}
+
+.btnkembali {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.btnkembali:hover {
+    background-color: #c82333;
+}
+
+.btnreset {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.btnreset:hover {
+    background-color: #c82333;
+}
+
+
+.showAlert {
+    position: fixed;
+    top: 20px;
+    right: -300px;
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.showAlert.show {
+    right: 20px;
+    opacity: 1;
+    animation: bounceIn 0.6s;
+}
+
+.showAlert.error {
+    background: linear-gradient(45deg, #dc3545, #ff6b6b);
+}
+
+.showAlert.warning {
+    background: linear-gradient(45deg, #ffc107, #ffcd39);
+    color: #333;
+}
+
+.showAlert.info {
+    background: linear-gradient(45deg, #17a2b8, #20c997);
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.price-diff {
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    width: 280px;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    display: none;
+    animation: fadeInUp 0.6s ease;
+}
+
+.close-price-diff {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    color: #999;
+    transition: color 0.3s;
+}
+
+.close-price-diff:hover {
+    color: #dc3545;
+}
+
+.foto-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.user-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #20c997;
+    transition: transform 0.3s;
+}
+
+.user-photo:hover {
+    transform: rotate(10deg) scale(1.1);
+}
+
+#barangContainer {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+#barangContainer thead {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    z-index: 10;
+}
+
+#riwayat-list {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.riwayat-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.3s;
+}
+
+.riwayat-item:hover {
+    background: #f9f9f9;
+}
+
+#upload-log {
+    font-family: monospace;
+    color: #333;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+
+/* Tambahan CSS agar tampilan HP sama dengan PC */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 745px; /* batasi agar di PC tidak terlalu melebar */
+  margin: 20px auto;
+  box-sizing: border-box;
+}
+
+/* Atur tombol kiri kanan dengan flex */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Perbaikan form agar tidak kecil di HP */
+#form-barang,
+#cari-barang {
+  width: 100%;
+  max-width: 600px;
+}
+
+#form-barang input,
+#cari-barang input,
+#form-barang select {
+  width: 80%;
+  box-sizing: border-box;
+}
+
+/* Agar tabel bisa di-scroll di HP */
+#barangContainer {
+  width: 100%;
+  overflow-x: auto;
+}
+#riwayat-list {
+    width: 95%;
+    overflow-x: auto;
+}
+ #sidebarBarangContainer {
+    width: 98%;
+    overflow-x: auto;
+ }
+#barangContainer table,
+#sidebarBarangContainer table {
+  min-width: 435px; /* cegah tabel terlalu sempit di HP */
+}
+
+/* Pastikan gambar profil tetap proporsional */
+.user-photo {
+  width: 70px;
+  height: 70px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .container {
+    padding: 11px;
+    margin: 10px;
+    width: 100%;
+  }
+  button {
+    width: 70%;
+    max-width: 100%;
+  }
+  .logout-btn, .opname-btn, .btnBackToDashboard, .btnkembali, .btnreset {
+    width: 25%;
+    max-width: 100%;
+  }
+  .btnBackToDashboard {
+    top: 10px;
+    left: 10px;
+
+  }
+}
+
+@media (max-width: 480px) {
+  h2, h3, h4, p {
+    text-align: center;
+  }
+  table th, table td {
+    font-size: 12px;
+    padding: 0px;
+  }
+  .user-photo {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+
+
+/* Popup Edit */
+.edit-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.edit-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  animation: throwCard 0.6s ease forwards;
+  position: relative;
+}
+
+.edit-card.closing {
+  animation: throwCardReverse 0.6s ease forwards;
+}
+
+.edit-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.edit-card input {
+  width: 95%;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.edit-card button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.edit-card button:hover {
+  background: linear-gradient(45deg, #218838, #138f6e);
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #dc3545;
+}
+
+@keyframes throwCard {
+  0% { transform: translateY(100vh) scale(0.5) rotate(-15deg); opacity: 0; }
+  60% { transform: translateY(-10px) scale(1.05) rotate(3deg); opacity: 1; }
+  100% { transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes throwCardReverse {
+  0% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
+  40% { transform: translateY(-10px) scale(1.05) rotate(-3deg); opacity: 0.7; }
+  100% { transform: translateY(100vh) scale(0.5) rotate(15deg); opacity: 0; }
+}
+
+
+
+
+
+.confirm-popup {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.4);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 3000;
+}
+
+
+.confirm-card {
+background: #fff;
+border-radius: 12px;
+padding: 20px;
+width: 90%;
+max-width: 350px;
+text-align: center;
+box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+animation: throwCard 0.6s ease forwards;
+}
+
+
+.confirm-card h3 {
+margin-top: 0;
+}
+
+
+.confirm-actions {
+display: flex;
+justify-content: space-around;
+margin-top: 15px;
+}
+
+
+.confirm-actions button {
+padding: 8px 16px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-weight: bold;
+transition: transform 0.2s;
+}
+
+
+#confirm-yes { background: linear-gradient(45deg, #dc3545, #ff6b6b); color: #fff; }
+#confirm-no { background: #ccc; }
+
+
+.confirm-actions button:hover { transform: scale(1.05); }
+
+
+.confirm-card.closing { animation: throwCardReverse 0.6s ease forwards; }
+
+
+
+
+
+
+
+
+.alert-popup {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.3);
+display: flex;
+justify-content: center;
+align-items: flex-start;
+z-index: 3000;
+}
+
+
+.alert-card {
+margin-top: 60px;
+background: #fff;
+border-radius: 12px;
+padding: 15px 25px;
+font-weight: bold;
+color: #333;
+box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+animation: throwCard 0.6s ease forwards;
+}
+
+
+.alert-card.success { background: linear-gradient(45deg, #28a745, #20c997); color: #fff; }
+.alert-card.error { background: linear-gradient(45deg, #dc3545, #ff6b6b); color: #fff; }
+
+
+.alert-card.closing { animation: throwCardReverse 0.6s ease forwards; }
+
+
+@keyframes throwCard {
+0% { transform: translateY(-100%) scale(0.5) rotate(-15deg); opacity: 0; }
+60% { transform: translateY(10px) scale(1.05) rotate(3deg); opacity: 1; }
+100% { transform: translateY(0) scale(1) rotate(0); }
+}
+
+
+@keyframes throwCardReverse {
+0% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
+40% { transform: translateY(10px) scale(1.05) rotate(-3deg); opacity: 0.7; }
+100% { transform: translateY(-100%) scale(0.5) rotate(15deg); opacity: 0; }
+}
+
+
+
+
+.qty-popup {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.4);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 4000;
+}
+
+
+.qty-card {
+background: #fff;
+border-radius: 12px;
+padding: 20px;
+width: 90%;
+max-width: 350px;
+text-align: center;
+box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+animation: throwCard 0.6s ease forwards;
+}
+
+
+.qty-card.closing { animation: throwCardReverse 0.6s ease forwards; }
+
+
+.qty-card h3 { margin-top: 0; }
+
+
+.qty-card input {
+width: 100%;
+margin: 10px 0;
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 8px;
+font-size: 16px;
+text-align: center;
+}
+
+
+.qty-actions {
+display: flex;
+justify-content: space-around;
+margin-top: 15px;
+}
+
+
+.qty-actions button {
+padding: 8px 16px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-weight: bold;
+transition: transform 0.2s;
+}
+
+
+#qty-ok { background: linear-gradient(45deg, #007bff, #00bfff); color: #fff; }
+#qty-cancel { background: #ccc; }
+
+
+.qty-actions button:hover { transform: scale(1.05); }
+
+
+
+
+.statistik-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.statistik-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  position: relative;
+  animation: throwCard 0.6s ease forwards;
+}
+
+.statistik-card.closing {
+  animation: throwCardReverse 0.6s ease forwards;
+}
+
+.statistik-card h3 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.statistik-card button {
+  margin-top: 15px;
+  width: 100%;
+}
+
+/* Animasi sama dengan popup lainnya */
+@keyframes throwCard {
+  0% { transform: translateY(-100%) scale(0.5) rotate(-15deg); opacity: 0; }
+  60% { transform: translateY(10px) scale(1.05) rotate(3deg); opacity: 1; }
+  100% { transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes throwCardReverse {
+  0% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
+  40% { transform: translateY(10px) scale(1.05) rotate(-3deg); opacity: 0.7; }
+  100% { transform: translateY(-100%) scale(0.5) rotate(15deg); opacity: 0; }
+}
+
+
+
+/* Badge animasi bounce untuk kenaikan ⬆ dan penurunan ⬇ */
+.badge-bounce {
+  display: inline-block;
+  animation: bounceBadge 1s ease-in-out infinite;
+}
+
+@keyframes bounceBadge {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.3); }
+  50%  { transform: scale(0.9); }
+  75%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Warna khusus sesuai arah */
+.badge-up {
+  color: red;
+  font-weight: bold;
+}
+
+.badge-down {
+  color: green;
+  font-weight: bold;
+}
+
+
+/* Stabilitas UI tambahan */
+.maintenance-overlay {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+.maintenance-overlay[hidden] { display: none !important; }
+.maintenance-card { max-width: 500px; width: 100%; padding: 30px 20px; }
+.maintenance-icon { font-size: 80px; line-height: 1; color: #e0a800; margin-bottom: 15px; }
+.maintenance-card h1 { font-size: 24px; color: #333; margin-bottom: 10px; }
+.maintenance-card p { color: #555; font-size: 16px; }
+.qty-card select { width: 100%; margin: 8px 0; padding: 9px; border: 1px solid #ccc; border-radius: 8px; }
+.qty-help { display: block; color: #666; margin-top: 4px; }
+.action-group { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.action-group button { width: auto; margin: 2px; padding: 7px 10px; }
+.empty-row { color: #777; padding: 14px !important; }
+.riwayat-item .riwayat-actions { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.statistik-entry { text-align: left; padding: 10px 4px; border-bottom: 1px solid #eee; }
+.statistik-entry:last-child { border-bottom: 0; }
+#statistik-content { max-height: 300px; overflow-y: auto; }
+#statistik-chart canvas { max-height: 320px; }
+button:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+@media (max-width: 480px) {
+  .maintenance-icon { font-size: 60px; }
+  .maintenance-card h1 { font-size: 20px; }
+  .maintenance-card p { font-size: 14px; }
+}
+.alert-card.warning { background: linear-gradient(45deg, #ffc107, #ffcd39); color: #333; }
+.alert-card.info { background: linear-gradient(45deg, #17a2b8, #20c997); color: #fff; }

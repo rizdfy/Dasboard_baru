@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Data barang dipakai bersama oleh seluruh admin yang sudah login.
+    match /barang/{barangId} {
+      allow read, create, update, delete: if signedIn();
+    }
+
+    // Histori harga hanya dapat dibuat oleh user yang sedang login.
+    // Riwayat harga sengaja immutable agar catatan lama tidak dapat diedit dari aplikasi.
+    match /price_history/{historyId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // Stock opname bersifat privat per akun.
+    match /stock_opname/{opnameId} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow read, delete: if signedIn() && resource.data.uid == request.auth.uid;
+      allow update: if signedIn()
+                    && resource.data.uid == request.auth.uid
+                    && request.resource.data.uid == request.auth.uid;
+    }
+  }
+}
