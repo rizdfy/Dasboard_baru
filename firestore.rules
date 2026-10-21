@@ -1,0 +1,139 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===================== DAFTAR ADMIN =====================
+    // Hanya email di daftar ini yang boleh membuka & mengubah data toko.
+    // Untuk menambah/menghapus admin: ubah daftar ini, lalu klik Publish
+    // di Firebase Console → Firestore Database → Rules.
+    // Tulis email dengan huruf kecil semua.
+    // Email sungguhan (mis. Gmail). Wajib terverifikasi; login Google otomatis terverifikasi.
+    function adminEmails() {
+      return [
+        "rizdfy222@gmail.com"
+      ];
+    }
+
+    // Akun admin yang DIBUAT MANUAL di Firebase Console → Authentication → Users → Add user.
+    // Tidak perlu verifikasi email (cocok untuk email yang bukan kotak surat sungguhan).
+    // PENTING: buat akunnya di Console dulu sebelum Publish, supaya tidak ada orang lain
+    // yang sempat mendaftarkan email ini lebih dulu.
+    function akunAdminManual() {
+      return [
+        "admin@admin.admin"
+      ];
+    }
+    // ========================================================
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        (request.auth.token.email_verified == true
+          && request.auth.token.email.lower() in adminEmails())
+        || request.auth.token.email.lower() in akunAdminManual()
+      );
+    }
+
+    // Validasi isi data barang.
+    function validBarang(data) {
+      return data.keys().hasAll(["nama", "harga", "satuan", "isiPerSatuan"])
+        && data.nama is string && data.nama.size() > 0 && data.nama.size() <= 200
+        && data.harga is number && data.harga >= 0 && data.harga < 1000000000
+        && data.satuan is string && data.satuan.size() > 0 && data.satuan.size() <= 50
+        && data.isiPerSatuan is number && data.isiPerSatuan >= 1 && data.isiPerSatuan <= 100000
+        && (!("hargaSatuan" in data) || data.hargaSatuan is number)
+        && (!("hargaJual" in data) || (data.hargaJual is number && data.hargaJual >= 0 && data.hargaJual < 1000000000));
+    }
+
+    // Validasi isi dokumen stock opname.
+    function validOpname(data) {
+      return data.uid == request.auth.uid
+        && data.judul is string && data.judul.size() <= 200
+        && data.kurang is list && data.lebih is list;
+    }
+
+    // Data barang dipakai bersama oleh seluruh admin.
+    match /barang/{barangId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin() && validBarang(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Histori harga hanya bisa ditambah, tidak bisa diedit/dihapus dari aplikasi.
+    match /price_history/{historyId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.hargaLama is number
+        && request.resource.data.hargaBaru is number;
+      allow update, delete: if false;
+    }
+
+    // Katalog etalase pembeli dalam SATU dokumen (katalog/etalase) berisi daftar `produk`:
+    // nama, harga jual & jenis kemasan saja (tanpa harga modal). 1 kunjungan = 1 pembacaan.
+    // Boleh dibaca siapa saja; hanya admin yang mengubah (otomatis dari panel admin).
+    match /katalog/{docId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.produk is list
+        && request.resource.data.produk.size() <= 5000;
+      allow delete: if isAdmin();
+    }
+
+    // Catatan internal admin (mis. daftar id barang yang baru dihapus, untuk sinkron cache).
+    match /meta/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Pesanan pembeli.
+    // - Pembeli (akun apa pun yang login) membuat pesanan atas namanya sendiri berstatus "baru".
+    // - Pembeli hanya melihat pesanannya sendiri dan boleh membatalkan selama masih "baru".
+    // - Admin melihat semua pesanan dan mengubah statusnya.
+    match /pesanan/{pesananId} {
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == "baru"
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.items.size() <= 100
+        && request.resource.data.total is number
+        && request.resource.data.total > 0
+        && request.resource.data.namaPembeli is string
+        && request.resource.data.namaPembeli.size() > 0 && request.resource.data.namaPembeli.size() <= 100
+        && request.resource.data.telepon is string
+        && request.resource.data.telepon.size() >= 8 && request.resource.data.telepon.size() <= 20;
+      allow read: if signedIn() && (isAdmin() || resource.data.uid == request.auth.uid);
+      allow update: if isAdmin()
+        || (signedIn()
+            && resource.data.uid == request.auth.uid
+            && resource.data.status == "baru"
+            && request.resource.data.status == "dibatalkan"
+            && request.resource.data.dibatalkanOleh == "pembeli"
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(["status", "diperbarui", "dibatalkanPada", "dibatalkanOleh"]));
+      allow delete: if false;
+    }
+
+    // Catatan struk belanja grosir (foto kecil, daftar barang naik/turun). Hanya admin.
+    match /struk/{strukId} {
+      allow read, delete: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.items is list
+        && request.resource.data.items.size() <= 200;
+      allow update: if false;
+    }
+
+    // Stock opname bersifat privat per akun admin.
+    match /stock_opname/{opnameId} {
+      allow create: if isAdmin() && validOpname(request.resource.data);
+      allow read, delete: if isAdmin() && resource.data.uid == request.auth.uid;
+      allow update: if isAdmin()
+                    && resource.data.uid == request.auth.uid
+                    && validOpname(request.resource.data);
+    }
+  }
+}
